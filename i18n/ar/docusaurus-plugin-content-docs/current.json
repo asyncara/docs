@@ -1,0 +1,38 @@
+{
+  "version.label": {
+    "message": "0.10",
+    "description": "The label for version current"
+  },
+  "sidebar.guide.category.Runtime and concurrency": {
+    "message": "التشغيل والتزامن",
+    "description": "The label for category 'Runtime and concurrency' in sidebar 'guide'"
+  },
+  "sidebar.guide.category.Native Server": {
+    "message": "الخادم الأصلي",
+    "description": "The label for category 'Native Server' in sidebar 'guide'"
+  },
+  "sidebar.guide.category.HTTP client": {
+    "message": "عميل HTTP",
+    "description": "The label for category 'HTTP client' in sidebar 'guide'"
+  },
+  "sidebar.guide.category.Databases": {
+    "message": "قواعد البيانات",
+    "description": "The label for category 'Databases' in sidebar 'guide'"
+  },
+  "sidebar.guide.category.Files, networking and processes": {
+    "message": "الملفات والشبكات والعمليات",
+    "description": "The label for category 'Files, networking and processes' in sidebar 'guide'"
+  },
+  "sidebar.guide.category.Application recipes": {
+    "message": "وصفات التطبيقات",
+    "description": "The label for category 'Application recipes' in sidebar 'guide'"
+  },
+  "sidebar.guide.category.Operations and compatibility": {
+    "message": "التشغيل والتوافق",
+    "description": "The label for category 'Operations and compatibility' in sidebar 'guide'"
+  },
+  "sidebar.guide.category.API reference": {
+    "message": "مرجع API",
+    "description": "The label for category 'API reference' in sidebar 'guide'"
+  }
+}

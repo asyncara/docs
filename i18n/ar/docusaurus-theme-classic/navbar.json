@@ -1,0 +1,26 @@
+{
+  "title": {
+    "message": "Asyncara",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "Asyncara",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Get started": {
+    "message": "ابدأ الاستخدام",
+    "description": "Navbar item with label Get started"
+  },
+  "item.label.Recipes": {
+    "message": "وصفات تطبيقية",
+    "description": "Navbar item with label Recipes"
+  },
+  "item.label.API reference": {
+    "message": "مرجع API",
+    "description": "Navbar item with label API reference"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  }
+}

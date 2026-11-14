@@ -1,0 +1,144 @@
+{
+  "schema": 1,
+  "php": "8.5.12",
+  "results": [
+    {
+      "check": "syntax",
+      "status": "PASS",
+      "snippets": 105,
+      "exampleFiles": 12
+    },
+    {
+      "check": "processes.php",
+      "status": "NOT_EXECUTED",
+      "reason": "Bundle missing worker entrypoint; test complete runtime separately"
+    },
+    {
+      "check": "tasks.php",
+      "backend": "epoll",
+      "status": "PASS",
+      "seconds": 0.07530956109985709
+    },
+    {
+      "check": "shared-waiter.php",
+      "backend": "epoll",
+      "status": "PASS",
+      "seconds": 0.04504618467763066
+    },
+    {
+      "check": "queue.php",
+      "backend": "epoll",
+      "status": "PASS",
+      "seconds": 0.06264543859288096
+    },
+    {
+      "check": "sqlite.php",
+      "backend": "epoll",
+      "status": "PASS",
+      "seconds": 0.06124879093840718
+    },
+    {
+      "check": "files.php",
+      "backend": "epoll",
+      "status": "PASS",
+      "seconds": 0.05409081373363733
+    },
+    {
+      "check": "streams.php",
+      "backend": "epoll",
+      "status": "PASS",
+      "seconds": 0.051528776064515114
+    },
+    {
+      "check": "network.php",
+      "backend": "epoll",
+      "status": "PASS",
+      "seconds": 0.04513687686994672
+    },
+    {
+      "check": "http.php + server.php",
+      "backend": "epoll",
+      "httpBackend": "curl-multi",
+      "status": "PASS",
+      "responses": 4
+    },
+    {
+      "check": "http.php + server.php",
+      "backend": "epoll",
+      "httpBackend": "hyper-prototype",
+      "status": "PASS",
+      "responses": 4
+    },
+    {
+      "check": "server routes/json/errors",
+      "backend": "epoll",
+      "status": "PASS",
+      "requests": 5
+    },
+    {
+      "check": "tasks.php",
+      "backend": "poll",
+      "status": "PASS",
+      "seconds": 0.06220591673627496
+    },
+    {
+      "check": "shared-waiter.php",
+      "backend": "poll",
+      "status": "PASS",
+      "seconds": 0.04558897903189063
+    },
+    {
+      "check": "queue.php",
+      "backend": "poll",
+      "status": "PASS",
+      "seconds": 0.0422549513168633
+    },
+    {
+      "check": "sqlite.php",
+      "backend": "poll",
+      "status": "PASS",
+      "seconds": 0.05293233320116997
+    },
+    {
+      "check": "files.php",
+      "backend": "poll",
+      "status": "PASS",
+      "seconds": 0.060798170045018196
+    },
+    {
+      "check": "streams.php",
+      "backend": "poll",
+      "status": "PASS",
+      "seconds": 0.05808318825438619
+    },
+    {
+      "check": "network.php",
+      "backend": "poll",
+      "status": "PASS",
+      "seconds": 0.056502196937799454
+    },
+    {
+      "check": "http.php + server.php",
+      "backend": "poll",
+      "httpBackend": "curl-multi",
+      "status": "PASS",
+      "responses": 4
+    },
+    {
+      "check": "http.php + server.php",
+      "backend": "poll",
+      "httpBackend": "hyper-prototype",
+      "status": "PASS",
+      "responses": 4
+    },
+    {
+      "check": "server routes/json/errors",
+      "backend": "poll",
+      "status": "PASS",
+      "requests": 5
+    }
+  ],
+  "extensionSha256": "0698499520c3b3533ccd124429451432c217e94ece5f5997c1ae9600150b5403",
+  "configuration": "published Linux PHP 8.5.12 NTS bundle",
+  "moduleSourceCommit": "4252f83f2cebaaaa2be150984e5ab0fa6d5b1862"
+}

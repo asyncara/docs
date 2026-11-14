@@ -1,0 +1,381 @@
+{
+    "Asyncara": [
+        "sleep"
+    ],
+    "Asyncara\\Async": [
+        "run",
+        "spawn",
+        "await",
+        "gather",
+        "sleep",
+        "cancel",
+        "callLater",
+        "repeat",
+        "shield",
+        "timeout",
+        "taskGroup",
+        "wait",
+        "asCompleted",
+        "using"
+    ],
+    "Asyncara\\Runtime": [
+        "configure",
+        "configuration",
+        "information",
+        "supportsUserlandThreads",
+        "enableHooks",
+        "timeHooksEnabled",
+        "strictBlockingDetection",
+        "diagnostics"
+    ],
+    "Asyncara\\Future": [
+        "__construct",
+        "pendingCount",
+        "isCompleted",
+        "isCancelled",
+        "exception",
+        "result",
+        "await",
+        "cancel"
+    ],
+    "Asyncara\\Task": [
+        "isRunning",
+        "cancel"
+    ],
+    "Asyncara\\Awaitable": [
+        "await"
+    ],
+    "Asyncara\\Timer": [
+        "__construct",
+        "cancel",
+        "isActive"
+    ],
+    "Asyncara\\TaskGroup": [
+        "spawn",
+        "cancel"
+    ],
+    "Asyncara\\CancellationSource": [
+        "__construct",
+        "cancel"
+    ],
+    "Asyncara\\CancellationToken": [
+        "isRequested",
+        "throwIfRequested"
+    ],
+    "Asyncara\\WaitResult": [
+        "__construct"
+    ],
+    "Asyncara\\TaskResult": [
+        "__construct",
+        "from"
+    ],
+    "Asyncara\\Context": [
+        "set",
+        "get",
+        "all",
+        "isolated"
+    ],
+    "Asyncara\\Trace": [
+        "enable",
+        "disable",
+        "mark",
+        "snapshot",
+        "writeTo",
+        "dump"
+    ],
+    "Asyncara\\HookReport": [
+        "__construct",
+        "enabled",
+        "unsupported",
+        "reasons"
+    ],
+    "Asyncara\\Concurrency\\Queue": [
+        "__construct",
+        "put",
+        "tryPut",
+        "get",
+        "taskDone",
+        "join",
+        "count",
+        "statistics",
+        "close"
+    ],
+    "Asyncara\\Concurrency\\Lock": [
+        "__construct",
+        "acquire",
+        "release",
+        "synchronized"
+    ],
+    "Asyncara\\Concurrency\\Semaphore": [
+        "__construct",
+        "acquire",
+        "release",
+        "withPermit"
+    ],
+    "Asyncara\\Concurrency\\Event": [
+        "__construct",
+        "set",
+        "reset",
+        "isSet",
+        "wait"
+    ],
+    "Asyncara\\Stream\\AsyncStream": [
+        "fromProducer",
+        "getIterator",
+        "consume",
+        "close"
+    ],
+    "Asyncara\\Stream\\ReadableStream": [
+        "consume",
+        "close"
+    ],
+    "Asyncara\\Stream\\Emitter": [
+        "__construct",
+        "emit"
+    ],
+    "Asyncara\\App": [
+        "route",
+        "get",
+        "post",
+        "put",
+        "patch",
+        "delete",
+        "group",
+        "middleware",
+        "listen",
+        "stop",
+        "stats"
+    ],
+    "Asyncara\\Server\\Request": [
+        "__construct",
+        "param",
+        "query",
+        "header",
+        "json",
+        "stream"
+    ],
+    "Asyncara\\Server\\Response": [
+        "__construct",
+        "json",
+        "text",
+        "stream"
+    ],
+    "Asyncara\\Server\\StreamResponse": [
+        "__construct",
+        "close"
+    ],
+    "Asyncara\\Server\\Route": [
+        "__construct",
+        "middleware"
+    ],
+    "Asyncara\\Server\\RequestBodyStream": [
+        "__construct",
+        "getIterator",
+        "consume",
+        "close"
+    ],
+    "Asyncara\\HTTP\\HttpClient": [
+        "__construct",
+        "get",
+        "getStream",
+        "download",
+        "upload",
+        "requestStream",
+        "multipart",
+        "multipartFiles",
+        "post",
+        "request"
+    ],
+    "Asyncara\\HTTP\\Response": [
+        "__construct",
+        "json"
+    ],
+    "Asyncara\\HTTP\\ResponseHead": [
+        "__construct"
+    ],
+    "Asyncara\\HTTP\\ResponseStream": [
+        "headers",
+        "getIterator",
+        "consume",
+        "close"
+    ],
+    "Asyncara\\HTTP\\Psr\\Client": [
+        "__construct",
+        "sendRequest"
+    ],
+    "Asyncara\\Database\\Database": [
+        "connectAsync"
+    ],
+    "Asyncara\\SQLite\\Connection": [
+        "open",
+        "query",
+        "execute",
+        "prepare",
+        "beginTransaction",
+        "inTransaction",
+        "commit",
+        "rollback",
+        "transaction",
+        "close",
+        "savepoint",
+        "rollbackTo",
+        "releaseSavepoint"
+    ],
+    "Asyncara\\SQLite\\Statement": [
+        "__construct",
+        "execute"
+    ],
+    "Asyncara\\PostgreSQL\\Connection": [
+        "connect",
+        "query",
+        "execute",
+        "prepare",
+        "transaction",
+        "nextNotification",
+        "statistics",
+        "close",
+        "beginTransaction",
+        "commit",
+        "rollback",
+        "inTransaction",
+        "savepoint",
+        "rollbackTo",
+        "releaseSavepoint"
+    ],
+    "Asyncara\\PostgreSQL\\Statement": [
+        "__construct",
+        "execute"
+    ],
+    "Asyncara\\MySQL\\Connection": [
+        "connect",
+        "query",
+        "execute",
+        "prepare",
+        "transaction",
+        "close",
+        "beginTransaction",
+        "commit",
+        "rollback",
+        "inTransaction",
+        "savepoint",
+        "rollbackTo",
+        "releaseSavepoint"
+    ],
+    "Asyncara\\MySQL\\Statement": [
+        "__construct",
+        "execute"
+    ],
+    "Asyncara\\Redis\\Connection": [
+        "connect",
+        "command",
+        "pipeline",
+        "transaction",
+        "subscribe",
+        "nextMessage",
+        "drainNotifications",
+        "statistics",
+        "close"
+    ],
+    "Asyncara\\Pool\\ConnectionPool": [
+        "__construct",
+        "withConnection",
+        "statistics",
+        "close"
+    ],
+    "Asyncara\\IO\\Files": [
+        "open",
+        "read",
+        "write",
+        "replaceAtomic",
+        "append",
+        "delete",
+        "rename",
+        "mkdir",
+        "rmdir",
+        "stat",
+        "entries",
+        "copy",
+        "exists",
+        "readStream",
+        "writeStream"
+    ],
+    "Asyncara\\IO\\File": [
+        "open",
+        "stage",
+        "publish",
+        "read",
+        "write",
+        "seek",
+        "stat",
+        "sync",
+        "isClosed",
+        "close"
+    ],
+    "Asyncara\\IO\\TcpStream": [
+        "__construct",
+        "connect",
+        "read",
+        "readExactly",
+        "write",
+        "resource",
+        "close"
+    ],
+    "Asyncara\\IO\\TcpServer": [
+        "__construct",
+        "address",
+        "accept",
+        "close"
+    ],
+    "Asyncara\\IO\\UdpSocket": [
+        "__construct",
+        "address",
+        "send",
+        "receive",
+        "close"
+    ],
+    "Asyncara\\IO\\Dns": [
+        "resolve"
+    ],
+    "Asyncara\\WebSocket\\Client": [
+        "connect"
+    ],
+    "Asyncara\\WebSocket\\Server": [
+        "accept"
+    ],
+    "Asyncara\\WebSocket\\Connection": [
+        "receive",
+        "send",
+        "ping",
+        "close",
+        "abort",
+        "exception",
+        "statistics"
+    ],
+    "Asyncara\\WebSocket\\Message": [
+        "__construct"
+    ],
+    "Asyncara\\Pool\\ProcessPool": [
+        "__construct",
+        "submit",
+        "statistics",
+        "close"
+    ],
+    "Asyncara\\Exception\\FilesystemException": [
+        "__construct",
+        "isMissing"
+    ],
+    "Asyncara\\WebSocket\\ProtocolException": [
+        "__construct"
+    ],
+    "Asyncara\\Server\\RequestBodyException": [
+        "__construct"
+    ],
+    "Asyncara\\HTTP\\Psr\\NetworkException": [
+        "__construct",
+        "getRequest"
+    ],
+    "Asyncara\\HTTP\\Psr\\RequestException": [
+        "__construct",
+        "getRequest"
+    ]
+}
