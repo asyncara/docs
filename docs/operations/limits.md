@@ -34,4 +34,4 @@ Resource-bearing objects generally reject cloning and serialization. Assignment 
 
 ## Deployment budgets
 
-Set PHP memory_limit, process/container limits, descriptor limits, connection limits and request-body limits consistently. A multiworker App multiplies per-process pools and memory. Monitor steady-state trends after warmup rather than declaring no leak from one RSS reading. Use [diagnostics](diagnostics.md) to inspect backend and pending work; diagnostic coverage is intentionally bounded.
+Set PHP memory_limit, process/container limits, descriptor limits, connection limits and request-body limits consistently. A multiworker App multiplies per-process pools and memory. Monitor memory and descriptor trends after application warmup and completed-request cleanup. Use [diagnostics](diagnostics.md) to inspect backend and pending work; diagnostic coverage is intentionally bounded.

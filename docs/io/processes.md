@@ -42,5 +42,5 @@ Timeout/cancellation or a crashed worker can cause that child to be discarded an
 This is not a userland ThreadPool. ZTS interpreter-thread execution remains outside the supported model. ProcessPool requires process-launch facilities and the bundled worker entry point; sandboxed hosts and Android packages need separate availability checks. See `examples/jobs.php` and `examples/processes.php` for the runnable pair.
 
 :::caution Initial prebuilt package limitation
-The initial Linux 0.10.0 binary bundle omits `bin/worker.php`. ProcessPool therefore requires a complete source/runtime installation containing that entry point; the standalone bundle alone is insufficient. Do not treat the source example test as proof that this missing bundle file exists.
+The initial Linux 0.10.0 binary bundle omits `bin/worker.php`. ProcessPool therefore requires a complete source/runtime installation containing that entry point; the standalone bundle alone is insufficient.
 :::

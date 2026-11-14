@@ -2,7 +2,7 @@
 title: "TLS, proxies and trust boundaries"
 ---
 
-TLS verification is part of the supported transport contract. Configure trust explicitly when using a private CA; do not disable verification to make a test pass. Certificate identity, proxy identity and origin identity are separate security boundaries.
+TLS verification is part of the supported transport contract. Configure trust explicitly when using a private CA; keep verification enabled. Certificate identity, proxy identity and origin identity are separate security boundaries.
 
 ## Origin TLS and client certificates
 
@@ -31,7 +31,7 @@ $response = $http->get('https://service.example/data')->await();
 
 Validate required environment variables before construction. Proxy URLs must not embed userinfo when explicit credentials are used. Origin and proxy CA verification remain independent. Basic credentials on a plaintext HTTP proxy are plaintext on that hop, even when CONNECT later tunnels origin TLS. Choose an HTTPS proxy when the proxy hop needs encryption. Do not inject Proxy-Authorization as an application header.
 
-Explicit HTTP/HTTPS forward proxies and CONNECT are supported in the tested transport paths. SOCKS 5 uses local origin DNS; SOCKS 5h delegates it to the proxy. Use `socks5://proxy.example:1080` or `socks5h://proxy.example:1080`, with explicit username/password where required. Hyper does not automatically consume environment proxy variables. SOCKS 4, BIND/UDP, Digest/NTLM/Negotiate and universal appliance compatibility are not claimed.
+Use an explicit HTTP/HTTPS forward proxy or CONNECT tunnel. SOCKS5 uses local origin DNS; SOCKS5h delegates it to the proxy. Use `socks5://proxy.example:1080` or `socks5h://proxy.example:1080`, with explicit username/password where required. Hyper does not automatically consume environment proxy variables. SOCKS4, SOCKS BIND/UDP and Digest/NTLM/Negotiate proxy authentication are unsupported.
 
 ## Redirects and SSRF
 

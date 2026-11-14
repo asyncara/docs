@@ -42,6 +42,6 @@ try {
 } finally { $sender->close(); $receiver->close(); }
 ```
 
-Run this inside Async::run. Destinations must be numeric IPv 4/IPv 6 with a valid port; resolve separately if needed. Datagram size is bounded and a partial send is an error. UDP provides no reliable delivery, ordering or application authentication. Bound the enclosing operation with `Async::timeout` when a peer may never reply.
+Run this inside Async::run. Destinations must be numeric IPv4/IPv6 with a valid port; resolve separately if needed. Datagram size is bounded and a partial send is an error. UDP provides no reliable delivery, ordering or application authentication. Bound the enclosing operation with `Async::timeout` when a peer may never reply.
 
-DNS is available as `Dns::resolve($hostname)->await()`. Cache policy, retries and service discovery belong to your application. IPv 6 addresses need bracket syntax when combined with a port. Always close sockets and listeners; cooperative cancellation releases waits but does not invent an application-level delivery acknowledgement.
+DNS is available as `Dns::resolve($hostname)->await()`. Cache policy, retries and service discovery belong to your application. IPv6 addresses need bracket syntax when combined with a port. Always close sockets and listeners; cooperative cancellation releases waits but does not invent an application-level delivery acknowledgement.

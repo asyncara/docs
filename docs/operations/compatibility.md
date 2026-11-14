@@ -1,31 +1,42 @@
 ---
-title: "Compatibility and implementation boundaries"
+title: "Compatibility"
 ---
 
-The documentation targets the 0.10 API family. Release artifacts and later development source are not interchangeable. Check the manifest of the exact package you installed and inspect runtime capabilities before choosing an optional backend.
+Choose a package for your PHP version and platform, then check the features available in that installation with `asyncara --check` or `Runtime::information()`.
 
-| Capability | Execution model | Boundary |
+## Platforms and packages
+
+| Platform | Package requirements | Availability |
 |---|---|---|
-| TCP / UDP | Native nonblocking readiness | epoll/poll on supported targets |
-| PostgreSQL | Native nonblocking libpq | Linked library/server/TLS configuration matters |
-| MySQL / MariaDB | Connector/C async state machine | Independent server tests; verified TLS currently numeric IP |
-| Redis | Nonblocking TCP + RESP | No complete Cluster/Sentinel client |
-| HTTP curl | Event-driven curl multi | Protocol support depends on build and API path |
-| HTTP Hyper | Rust event-driven integration | Optional backend; HTTP/1.1 and verified HTTPS HTTP/2 scope |
-| App | Native HTTP/1.1 server + Fiber handlers | CLI; not an HTTP/2 or HTTP/3 server |
-| SQLite / files / DNS | Native worker-backed async | Blocking native calls execute outside the loop |
-| ProcessPool | Multiprocess parallelism | Requires process-launch support |
+| Linux | Ubuntu 24.04, x86_64, PHP 8.3.36 / 8.4.27 / 8.5.12 NTS | See [installation](../installation.md) for download availability |
+| Android / Termux | Bionic, aarch64 or x86_64, PHP 8.5.12 NTS | Preview packages; manual package installation |
+| Windows | — | No supported package |
+| macOS / FreeBSD | — | No supported prebuilt package |
+| 32-bit targets | — | No supported package |
 
-## Platforms and PHP
+The PHP library targets PHP 8.3–8.5. A prebuilt extension requires the exact PHP build it was packaged for, including NTS/ZTS, architecture and debug mode. Do not use a Linux/glibc package in native Termux/Bionic. ZTS packages and concurrent PHP interpreter threads are not supported installation options.
 
-Linux NTS PHP 8.3,8.4 and 8.5 has the main validation history. Published Linux packages cover specific PHP patch versions and x 86_64 tuples, not every distribution/libc ABI. Android 64 preview packages cover aarch 64/x 86_64 with PHP 8.5.12 NTS and a later source checkpoint; they require the matching environment and do not certify every Android app sandbox. The owner's earlier Android tests are distinct from the published artifact matrix.
+## Features and backends
 
-Windows and 32-bit packaging are deferred. macOS and FreeBSD do not have a verified prebuilt release matrix here. A poll backend does not by itself certify another operating system. Do not force a Linux binary onto a different ABI.
+| Feature | Backend | What to account for |
+|---|---|---|
+| TCP / UDP | Nonblocking sockets with epoll/poll | Use one read owner per byte stream |
+| PostgreSQL | Nonblocking libpq | Configure server authentication and certificate verification |
+| MySQL / MariaDB | Connector/C asynchronous API | Verified TLS requires a numeric IP and matching IP SAN |
+| Redis | Nonblocking TCP and RESP | Cluster and Sentinel client routing are unavailable |
+| HTTP client | curl multi or optional Hyper | Hyper requires a package built with that backend |
+| Native Server | HTTP/1.1 with PHP Fiber handlers | CLI only; no HTTP/2 or HTTP/3 listener |
+| SQLite / files / DNS | Native workers | Native calls may need to finish before cancellation cleanup completes |
+| ProcessPool | Separate PHP processes | Requires process-launch support and the complete worker entry point |
 
-ZTS has limited investigation, not concurrent-interpreter certification. Userland ThreadPool is not implemented. Native workers avoid Zend access; ProcessPool is the supported parallel PHP model. io_uring filesystem, kqueue and IOCP are not implemented backends.
+Hyper supports HTTPS HTTP/2 negotiation; HTTP/3 is unavailable. For streaming, upload and proxy details, use the [HTTP guide](../http/client.md). Filesystem operations use pthread workers; io_uring, kqueue and IOCP are unavailable.
 
-## Runtime modes and integrations
+## Application integration
 
-CLI and Native Server are primary modes. PHP-FPM compatibility is retained, but historical FPM reliability failures remain and it is not the current primary deployment-hardening target. Composer integration and PSR-17/PSR-18 adapters exist; that is not certification of every Laravel, Symfony, WordPress, AMPHP, Revolt or ReactPHP lifecycle.
+Use CLI for scripts and background jobs, and Native Server for a standalone HTTP service. `App::listen()` cannot run inside a PHP-FPM request. PHP-FPM support is experimental; validate your application's request cleanup before choosing that deployment mode.
 
-Optional hooks cover sleep/usleep with documented signal limitations. Ordinary filesystem, cURL, PDO, MySQLi and ext-redis calls do not become asynchronous. Use the explicit Asyncara APIs. Short fast gates and example tests do not certify 24-hour endurance. The release remains EXPERIMENTAL.
+The PSR-18 HTTP adapter accepts PSR-17 factories. Integrating a framework requires its own application bootstrap and request lifecycle; there is no automatic adapter that runs Laravel, Symfony or WordPress inside Asyncara. Do not nest Asyncara and another library's top-level event loop.
+
+Optional sleep/usleep hooks do not affect ordinary filesystem functions, cURL, PDO, MySQLi or ext-redis. Use Asyncara's explicit APIs for those operations. CPU-bound PHP work can use ProcessPool; userland ThreadPool is unavailable.
+
+Version 0.10.0 is **EXPERIMENTAL**. Exercise the features your application needs before deployment.

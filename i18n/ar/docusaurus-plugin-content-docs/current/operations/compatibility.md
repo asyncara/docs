@@ -1,22 +1,40 @@
 ---
-title: "التوافق وحدود التنفيذ"
+title: "التوافق"
 ---
 
-يستهدف الدليل عائلة API0.10. الحزمة المنشورة والتطوير اللاحق ليسا المصدر نفسه؛ راجع manifest والقدرات الفعلية.
+اختر حزمة مطابقة لـPHP والنظام، ثم افحص الميزات المتاحة باستخدام `asyncara --check` أو `Runtime::information()`.
 
-| القدرة | التنفيذ |
-|---|---|
-| TCP/UDP | جاهزية غير حاجبة epoll/poll |
-| PostgreSQL | libpq غير حاجب |
-| MySQL/MariaDB | Connector/C start/continue، TLS المتحقق حالياً IP رقمي |
-| Redis | TCP/RESP غير حاجب، دون Cluster/Sentinel كامل |
-| HTTP | curl multi أو Hyper الاختياري |
-| App | HTTP/1.1 وFibers، ليس خادم HTTP/2/3 |
-| SQLite/Files/DNS | عمال أصليون |
-| ProcessPool | عمليات متعددة |
+## الأنظمة والحزم
 
-Linux NTS PHP8.3/8.4/8.5 أساس الاختبارات. الحزم الجاهزة لإصدارات PHP ومعماريات وABI محددة، لا لكل توزيع. Android64 preview لـaarch64/x86_64 مع PHP8.5.12 NTS من مصدر أحدث؛ ليس اعتماداً لكل sandbox. اختبارات المالك السابقة منفصلة عن مصفوفة الحزم.
+| النظام | متطلبات الحزمة | التوفر |
+|---|---|---|
+| Linux | Ubuntu 24.04 وx86_64 وPHP 8.3.36 أو 8.4.27 أو 8.5.12 NTS | راجع [التثبيت](../installation.md) لتوفر التنزيل |
+| Android / Termux | Bionic وaarch64 أو x86_64 وPHP 8.5.12 NTS | حزم preview بتثبيت يدوي |
+| Windows | — | لا توجد حزمة مدعومة |
+| macOS / FreeBSD | — | لا توجد حزمة جاهزة مدعومة |
+| معماريات 32-bit | — | لا توجد حزمة مدعومة |
 
-Windows و32bit مؤجلان. لا توجد مصفوفة حزم معتمدة هنا لـmacOS/FreeBSD. poll لا يثبت توافق OS. ZTS ليس اعتماداً لمفسرات متزامنة، وThreadPool وio_uring للملفات وkqueue وIOCP غير منفذة.
+تستهدف المكتبة PHP 8.3–8.5، لكن الامتداد الجاهز يحتاج بناء PHP المطابق بما فيه الإصدار وNTS/ZTS والمعمارية وdebug. لا تستخدم حزمة glibc داخل Termux/Bionic. حزم ZTS وخيوط مفسرات PHP المتزامنة ليست خيارات تثبيت مدعومة.
 
-CLI وNative Server أولوية؛ توافق FPM باقٍ مع إخفاقات تاريخية موثقة وليس أولوية التطوير الحالية. Composer وPSR17/18 لا يعنيان اعتماد كل framework. hooks اختيارية لـsleep/usleep فقط؛ PDO/cURL/ملفات PHP لا تصبح async. الاختبارات القصيرة ليست شهادة24 ساعة. الإصدار EXPERIMENTAL.
+## الميزات والتنفيذ
+
+| الميزة | التنفيذ | ما ينبغي مراعاته |
+|---|---|---|
+| TCP/UDP | مقابس غير حاجبة وepoll/poll | قارئ مالك واحد لكل تدفق بايتات |
+| PostgreSQL | libpq غير حاجب | إعداد المصادقة والتحقق من الشهادة |
+| MySQL/MariaDB | Connector/C غير متزامن | TLS المتحقق يتطلب IP رقمياً وIP SAN مطابقاً |
+| Redis | TCP وRESP غير حاجبين | لا يوجد عميل Cluster أو Sentinel |
+| HTTP | curl multi أو Hyper اختياري | يحتاج Hyper حزمة تتضمنه |
+| Native Server | HTTP/1.1 ومعالجات Fiber | CLI فقط، دون مستمع HTTP/2 أو HTTP/3 |
+| SQLite/Files/DNS | عمال أصليون | قد تنتظر عملية بدأت حتى تنتهي أثناء الإلغاء |
+| ProcessPool | عمليات PHP مستقلة | يحتاج تشغيل العمليات وملف العامل الكامل |
+
+Hyper يدعم التفاوض على HTTP/2 عبر HTTPS؛ HTTP/3 غير متاح. راجع [HTTP](../http/client.md) للبث والرفع وproxy. الملفات تستخدم pthread، ولا تتوفر io_uring أو kqueue أو IOCP.
+
+## الدمج مع التطبيق
+
+استخدم CLI للسكربتات والمهام الخلفية وNative Server لخدمة HTTP مستقلة. لا تشغّل App::listen داخل طلب FPM. دعم FPM تجريبي؛ تحقق من تنظيف موارد تطبيقك عند اختيار هذا النمط.
+
+محول PSR-18 يقبل مصانع PSR-17. الأطر تحتاج bootstrap ودورة طلب خاصة بها؛ لا يوجد محول تلقائي لتشغيل Laravel أو Symfony أوWordPress داخل Asyncara. لا تداخل حلقتَي تشغيل عليا لمكتبتين.
+
+Hooks الخاصة بـsleep/usleep لا تغيّر PDO أوMySQLi أوext-redis أوcURL أوملفات PHP. استخدم واجهات Asyncara الصريحة، وProcessPool للأعمال الحسابية المستقلة؛ ThreadPool غير متاح. الإصدار 0.10.0 **تجريبي**؛ افحص الميزات التي يحتاجها تطبيقك قبل النشر.

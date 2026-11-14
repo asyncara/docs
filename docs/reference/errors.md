@@ -2,7 +2,7 @@
 title: "Errors"
 ---
 
-Signatures generated from the installed 0.10.0 runtime. Read the [usage guide](../runtime/cancellation.md) for ownership, error and backend semantics. Inherited methods are listed under their declaring class. Low-level asyncara_* transport functions and internal scheduler machinery are not application APIs.
+Classes and method signatures for Asyncara 0.10.0. Read the [usage guide](../runtime/cancellation.md) for examples, error handling and resource cleanup. Inherited methods are listed under their declaring class.
 
 ## `Asyncara\Exception\OperationException`
 

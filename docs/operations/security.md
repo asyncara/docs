@@ -14,7 +14,7 @@ App handlers must validate decoded JSON shapes, body sizes, route parameters and
 
 Use trusted private directories for uploads, staging and diagnostics. A path validation check is not a complete defense against concurrent symlink replacement by another local actor. Do not build shell commands, SQL, process-bootstrap paths or job registries from untrusted input. Bind SQL parameters and use a fixed ProcessPool registry.
 
-Keep secrets in a deployment secret store or restricted configuration. Error responses must not expose stack traces, SQL values, DSNs or Authorization headers. Avoid publishing traces or benchmark artifacts with private host paths. Diagnostic events omit payloads, but deployment metadata can still be sensitive.
+Keep secrets in a deployment secret store or restricted configuration. Error responses must not expose stack traces, SQL values, DSNs or Authorization headers. Redact private paths and deployment metadata from logs before sharing them. Diagnostic events omit payloads, but deployment metadata can still be sensitive.
 
 ## Memory, shutdown and dependencies
 

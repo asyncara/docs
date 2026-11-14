@@ -33,7 +33,7 @@ ASYNCARA_HTTP_BACKEND=hyper-prototype asyncara client.php
 ASYNCARA_BACKEND=poll asyncara client.php
 ```
 
-`hyper-prototype` is the actual compatibility selector despite the feature's later development. It requires a Hyper-enabled build. Verify `Runtime::information()->httpBackend` instead of assuming selection succeeded. `ASYNCARA_BACKEND` chooses epoll/poll readiness, not the HTTP protocol. Select environment options before the process/runtime starts. There is no silent promise that missing Hyper falls back safely to curl.
+`hyper-prototype` selects the Hyper transport. It requires a Hyper-enabled build. Verify `Runtime::information()->httpBackend` instead of assuming selection succeeded. `ASYNCARA_BACKEND` chooses epoll/poll readiness, not the HTTP protocol. Select environment options before the process/runtime starts. If your extension lacks Hyper, use the default curl transport or install a Hyper-enabled package.
 
 Plain HTTP uses HTTP/1.1. Hyper negotiates HTTP/2 over verified TLS ALPN when the peer supports it; h2c and HTTP/3 are unavailable. curl buffered HTTP/2 depends on the compiled libcurl and negotiation. curl response streaming deliberately uses HTTP/1.1. A server's outbound HTTP/2 client does not make Native Server an HTTP/2 listener.
 

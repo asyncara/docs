@@ -20,6 +20,7 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci --no-audit --no-fund
+      - run: npm run check:content
       - run: npm run check:examples -- --lint-only
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3

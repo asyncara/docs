@@ -41,10 +41,10 @@ location / {
 }
 ```
 
-This is a starting configuration, not universal proxy certification. App does not automatically trust Forwarded/X-Forwarded-* or implement a trusted-proxy policy. Do not use an attacker-controlled forwarded address for authorization. Configure TLS and rate controls at the edge according to the actual deployment.
+App does not automatically trust Forwarded/X-Forwarded-* or implement a trusted-proxy policy. Do not use an attacker-controlled forwarded address for authorization. Configure TLS and rate controls at the edge according to the actual deployment.
 
 ## Shutdown and application behavior
 
 Run under your normal process manager with a working directory, environment variables and a finite stop grace period. Send graceful termination before forced termination. Keep credentials outside source, and avoid synchronous log/file/HTTP operations in a handler. `Runtime::diagnostics()` and `$app->stats()` expose different scopes: scheduler resources versus server transport counters.
 
-Session APIs, process-global cwd changes and static user state need deliberate treatment. FPM compatibility has not been removed, but it is no longer the primary development track. `App::listen` itself is CLI-only. Do not attempt to start a server listener inside an FPM request.
+Session APIs, process-global cwd changes and static user state need deliberate treatment. `App::listen` itself is CLI-only. Do not attempt to start a server listener inside an FPM request.

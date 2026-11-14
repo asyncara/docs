@@ -60,4 +60,4 @@ Async::run(function (): void {
 
 A client response exposes `status`, `body`, `headers` and `json()`. A 404 is not automatically a transport exception; inspect status explicitly. Connection, TLS and timeout failures use exceptions.
 
-The [examples directory](https://github.com/asyncara/docs/tree/main/examples) contains complete programs for tasks, shared waiter cancellation, queues, SQLite, files, streams, TCP, processes, the server and its HTTP client. Start with `asyncara examples/tasks.php`. Remote SQL/TLS examples in later guides require your own service configuration; they are not silently treated as executed local examples.
+The [examples directory](https://github.com/asyncara/docs/tree/main/examples) contains complete programs for tasks, shared waiter cancellation, queues, SQLite, files, streams, TCP, processes, the server and its HTTP client. Start with `asyncara examples/tasks.php`. Follow the [runnable examples guide](reference/examples.md) for commands and expected output. Remote SQL/TLS examples require your own service configuration.

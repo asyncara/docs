@@ -1,17 +1,25 @@
 # Asyncara developer documentation
 
-English-first Docusaurus documentation, with an Arabic RTL translation for the Asyncara PHP runtime. Published at
-https://asyncara.github.io/docs/ from this independent repository.
+English documentation for application developers using the Asyncara PHP runtime.
 
-Requires Node.js22 and npm. Run `npm ci`, `npm start`, or `npm run build`.
-The production build rejects broken links. Local search is generated at build time;
-no external search service or analytics account is required.
+- [Read the documentation](https://asyncara.github.io/docs/)
+- [Install Asyncara](https://asyncara.github.io/docs/guide/installation/)
+- [Run the examples](https://asyncara.github.io/docs/guide/reference/examples/)
+- [Browse the API](https://asyncara.github.io/docs/guide/reference/overview/)
 
-Runnable PHP examples live in `examples/`. Use an installed `asyncara` launcher,
-or set `ASYNCARA_AUTOLOAD` and load a matching extension explicitly. Run
-`python3 scripts/check_examples.py --help` for validation commands. Reference
-signatures are generated from source; guides explain lifecycle and usage.
+The runtime remains EXPERIMENTAL. Check the platform and feature requirements in each guide.
 
-The runtime remains EXPERIMENTAL. The docs distinguish 0.10.0, later Android
-preview packages, and unavailable features. They contain no private engineering
-logs, workstation manifests or credentials. Runtime code is in asyncara/asyncara.
+## Contribute to the documentation
+
+This independent repository contains the Docusaurus site and runnable PHP examples. The published site uses English only. Existing Arabic translation source is retained but excluded from the site and search index.
+
+Use Node.js 22 and npm:
+
+```sh
+npm ci
+npm start
+```
+
+Run `npm run check:content`, `npm run check:examples -- --lint-only` and `npm run build` before submitting a change. The build rejects broken links. Local search is generated during the build.
+
+PHP examples live in `examples/` and run through the installed `asyncara` launcher. Run `python3 scripts/check_examples.py --help` for contributor validation options. Public guides explain application usage; internal engineering reports and repository administration instructions do not belong in the site.

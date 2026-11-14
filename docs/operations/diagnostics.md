@@ -1,36 +1,57 @@
 ---
-title: "Diagnostics and bounded traces"
+title: "Monitor and debug your application"
 ---
 
-Start with capability inspection. The public API name does not identify its execution backend: HTTP may use curl multi or Hyper, files use workers, and ProcessPool uses separate processes.
+Use `Runtime::information()` to inspect the loaded capabilities and selected backend. Run this with the same launcher and environment as your application:
 
 ```php
 use Asyncara\Runtime;
 echo json_encode(Runtime::information(), JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR), "\n";
 ```
 
-Use `Runtime::diagnostics()` inside or after a runtime scope to inspect the current/last scheduler snapshot. Treat field availability as versioned; do not assume it observes all third-party allocations or all blocking code. Slow-task measurements identify long interpreter steps, not an automatic profiler of arbitrary extensions.
+For example, selecting Hyper requires a Hyper-enabled extension. Filesystem operations use native workers, while ProcessPool uses separate PHP processes. The capability information helps you check that your application is using the installation you intended.
 
-## Opt-in bounded provenance
+## Inspect scheduler activity
+
+`Runtime::diagnostics()` returns a snapshot of the current scheduler, or the last scheduler after its scope finishes. Inspect it after a small unit of work:
+
+```php
+use Asyncara\{Async, Runtime};
+Async::run(function (): void {
+    Async::sleep(0.01);
+});
+echo json_encode(Runtime::diagnostics(), JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR), "\n";
+```
+
+Compare snapshots from equivalent points in your application's lifecycle, after completed work has been collected. Monitor process memory and file descriptors alongside these counters: Asyncara cannot account for every allocation made by PHP, external libraries or the operating system. Slow-task measurements identify long interpreter steps; they do not profile all code inside other extensions.
+
+## Capture a bounded trace
+
+Tracing is disabled by default. Enable it before entering the runtime, then extract the result after the runtime finishes:
 
 ```php
 use Asyncara\{Async, Trace};
 Trace::enable(capacity: 1024, classes: Trace::WAIT | Trace::TIMER | Trace::SCHEDULER | Trace::MARK);
 try {
-    Async::run(function () { Async::sleep(0.01); Trace::mark(100); });
+    Async::run(function (): void {
+        Async::sleep(0.01);
+        Trace::mark(100);
+    });
     $snapshot = Trace::snapshot();
     echo json_encode($snapshot, JSON_THROW_ON_ERROR), "\n";
-} finally { Trace::disable(); }
+} finally {
+    Trace::disable();
+}
 ```
 
-Configure outside Async::run and extract after it finishes. The native ring stores numeric transition metadata, sequence numbers and monotonic timestamps, not application payloads. Overflow is visible in counters; a wrapped ring does not contain the complete request history. `mark($reason, freeze: true)` freezes collection for later extraction. Event classes select wait, job, scheduler, timer, I/O, lifecycle and application marks.
+Choose event classes for the problem you are investigating: waits, jobs, scheduler activity, timers, I/O, lifecycle events or application marks. Numeric marks let you identify application checkpoints without adding request bodies or other payloads to the trace. `Trace::mark(100, freeze: true)` stops collection at that checkpoint so later events cannot overwrite it.
 
-`dump($newPath)` creates a new file without overwriting an existing report. `writeTo($stream)` uses a caller-owned output stream. Extraction can block and is deliberately outside scheduler dispatch. Output is bounded; incomplete writes raise an error. Store traces in a private directory and still review metadata before sharing.
+The buffer accepts **16–4,096 events**. Each event has a sequence number and a monotonic timestamp. When the ring wraps, older events are overwritten and the counters record the loss; the remaining events are only a window of execution. Export is capped at **4 MiB**, and JSON conversion also uses PHP memory. Tracing adds work, so enable it for a bounded diagnostic run and compare application behavior with tracing disabled.
 
-## Interpreting evidence
+## Save and interpret a trace
 
-A long wall-clock wait may include host descheduling. Compare requested timeout, actual wait duration, ready events, timer deadlines and dispatch sequence before blaming a scheduler. An instrumented pass is diagnostic evidence, not an uninstrumented endurance pass. The historical zero-tick FPM failure is not retroactively explained by a new trace of a different run.
+After the runtime finishes, `Trace::dump($newPath)` creates a new file and rejects an existing destination. Choose a writable application directory and a unique filename. `Trace::writeTo($stream)` writes to an output stream you supply. Both operations may block; keep extraction outside request handlers and scheduler dispatch. Incomplete writes raise an error.
 
-For actionable reports include package version, PHP ABI/NTS/ZTS, backend, OS/architecture, sanitized reproducer and whether diagnostics were enabled. Never send credentials, SQL values, Authorization headers or private application payloads.
+For delayed timers, follow the sequence from timer registration to wait entry, wait exit and timer dispatch. Compare the requested wait timeout with the elapsed duration and returned readiness events. A long elapsed wait can include time when the operating system did not schedule the process. Also check for ordinary blocking PHP calls, CPU-heavy loops and synchronous logging in your handlers; see [troubleshooting](troubleshooting.md).
 
-The trace capacity is 16..4,096 events. Export has a separate 4 MiB cap; JSON conversion uses additional PHP memory.
+Traces omit application payloads, but process and resource metadata can still be sensitive. Store output with restricted access and review it before sharing. For help, include a small reproducer, PHP and Asyncara versions, operating system, backend and whether tracing was enabled. Never include credentials or private request data.

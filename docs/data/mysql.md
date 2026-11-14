@@ -2,7 +2,7 @@
 title: "Oracle MySQL and MariaDB"
 ---
 
-Both server families use Asyncara's MySQL API backed by MariaDB Connector/C asynchronous start/continue calls. This is a native socket-readiness state machine, not a PDO worker wrapper. Oracle MySQL and MariaDB remain separate compatibility targets; success against one does not certify every version of the other.
+Both server families use Asyncara's MySQL API backed by MariaDB Connector/C asynchronous start/continue calls. This is a native socket-readiness state machine, not a PDO worker wrapper. Configure authentication and TLS for the server family you use; Oracle MySQL and MariaDB may require different settings.
 
 ## Connect and bind
 
@@ -21,7 +21,7 @@ Async::run(function () {
 });
 ```
 
-TLS is enabled by default. In the current verified-TLS implementation, use a numeric host and a certificate with the matching IP subject alternative name. Arbitrary hostname-based verified Connector/C connections are not certified by this API. Configure the server certificate correctly; do not casually disable TLS. `certFile` and `keyFile` support client credentials, with `keyPassword` when applicable to the connector. Actual availability depends on the linked Connector/C TLS implementation.
+TLS is enabled by default. In the current verified-TLS implementation, use a numeric host and a certificate with the matching IP subject alternative name. Hostname-based verified TLS connections are not supported by this API in 0.10.0. Configure the server certificate correctly; do not casually disable TLS. `certFile` and `keyFile` support client credentials, with `keyPassword` when applicable to the connector. Actual availability depends on the linked Connector/C TLS implementation.
 
 For an explicitly trusted local development service, you can deliberately select `tls => false`; this is a different security scope. Use a Unix socket through `socket` when the server and deployment support it. Never commit passwords to source control.
 
@@ -33,4 +33,4 @@ Use `transaction`, manual begin/commit/rollback and savepoints according to the 
 
 ## Compatibility boundaries
 
-The project has separate integration coverage for Oracle MySQL 8.4 and MariaDB 11.8 configurations. That is not a universal authentication-plugin, proxy or managed-service certification. Verify your server version, authentication plugin, TLS CA/IP identity and Connector/C build together. When reporting a failure, include these versions and the error category, never credentials or SQL parameter values.
+The documented server versions are Oracle MySQL 8.4 and MariaDB 11.8. Check the authentication plugin, TLS CA/IP identity and linked Connector/C version when configuring either server or a managed database service. When reporting a failure, include these versions and the error category, never credentials or SQL parameter values.

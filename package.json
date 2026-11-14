@@ -7,7 +7,8 @@
     "build": "docusaurus build",
     "serve": "docusaurus serve --host 0.0.0.0",
     "clear": "docusaurus clear",
-    "check:examples": "python3 scripts/check_examples.py"
+    "check:examples": "python3 scripts/check_examples.py",
+    "check:content": "node scripts/check-content.mjs"
   },
   "dependencies": {
     "@docusaurus/core": "3.10.2",

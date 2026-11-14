@@ -40,4 +40,4 @@ finally { $pool->close(); }
 
 A pool lease covers the complete operation; no Connection escapes the callback. App handles malformed JSON as a 400 response, but your handler validates the shape and size. In a public API, add authentication, Content-Type policy, rate limits and an idempotency strategy for writes. Do not expose raw SQL exception text to clients.
 
-Try `curl -H 'Content-Type: application/json' -d '{"title":"first"}' http://127.0.0.1:8080/notes`, then GET `/notes/1`. Increasing server workers creates an independent pool per process; size your database connections and SQLite write contention accordingly. This recipe is intentionally one-process and does not claim distributed transaction safety.
+Try `curl -H 'Content-Type: application/json' -d '{"title":"first"}' http://127.0.0.1:8080/notes`, then GET `/notes/1`. Increasing server workers creates an independent pool per process; size your database connections and SQLite write contention accordingly. This example runs in one process.

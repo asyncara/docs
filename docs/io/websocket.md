@@ -2,7 +2,7 @@
 title: "WebSocket clients and TCP upgrades"
 ---
 
-WebSocket supports ws/wss clients and a server upgrade over an accepted TcpStream. It implements bounded RFC 6455 messages, masking, fragmentation, UTF-8 checks, ping/pong and close handling. It is not a claim of every browser, extension or Autobahn case being certified.
+WebSocket supports ws/wss clients and a server upgrade over an accepted TcpStream. It implements bounded RFC 6455 messages, masking, fragmentation, UTF-8 checks, ping/pong and close handling. Compression extensions are unsupported.
 
 ## Client lifecycle
 
@@ -29,6 +29,6 @@ The defaults bound message size to 1 MiB, queued messages to 16 and queued bytes
 
 Accept raw TCP first, then call `Asyncara\WebSocket\Server::accept($stream, origins: [...], protocols: [...], authorize: $callback)->await()`. The callback receives the request target and parsed handshake header array and must explicitly authorize the peer. Validate authentication independently of Origin; non-browser clients can omit or forge Origin. Use a bounded number of connection Tasks and close the listener during shutdown.
 
-This upgrade API is separate from App routing. Do not assume an App route can return a WebSocket object, or that App's HTTPS listener supplies WSS upgrade support. A direct WSS server backend is not certified by this raw-TCP interface. A separately configured TLS reverse proxy can terminate transport, but that deployment must be tested.
+This upgrade API is separate from App routing. Do not assume an App route can return a WebSocket object, or that App's HTTPS listener supplies WSS upgrade support. This raw-TCP server interface does not provide a direct WSS listener. A separately configured TLS reverse proxy can terminate transport, with the proxy forwarding the WebSocket upgrade to the TCP listener.
 
 Reconnection is application policy: use bounded backoff, authenticate again and decide how to recover missed messages. Automatic replay of application messages, compression extensions and exactly-once delivery are not provided. Cancellation cannot undo a frame already sent.

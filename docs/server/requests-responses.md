@@ -38,6 +38,6 @@ $app->get('/page', fn() => new Response(
 $app->delete('/notes/{id}', fn() => new Response('', 204));
 ```
 
-Statuses must be 200..599;204,205 and 304 require an empty body. The transport owns framing: do not add conflicting Content-Length/Transfer-Encoding values. The server Response uses an associative header array; the client HttpClient uses a list of complete header lines. They are intentionally different APIs.
+Statuses must be 200..599; 204, 205 and 304 require an empty body. The transport owns framing: do not add conflicting Content-Length/Transfer-Encoding values. The server Response uses an associative header array; the client HttpClient uses a list of complete header lines. They are intentionally different APIs.
 
 Unexpected handler exceptions produce a bounded 500 response without returning the exception trace. Catch domain errors explicitly to return a stable application error format. Log only safe context: request URLs, body values and exception arguments can contain credentials. If streaming already began, the status cannot be replaced; see [streaming](streaming.md).

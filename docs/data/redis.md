@@ -2,7 +2,7 @@
 title: "Redis commands, pipelines and subscriptions"
 ---
 
-Redis uses nonblocking TCP/TLS and Asyncara's RESP parser. It does not call ext-redis. RESP 2 is the default; select RESP 3 at connection time. The connection serializes command/response ownership so one caller cannot consume another caller's reply.
+Redis uses nonblocking TCP/TLS and Asyncara's RESP parser. It does not call ext-redis. RESP2 is the default; select RESP3 at connection time. The connection serializes command/response ownership so one caller cannot consume another caller's reply.
 
 ```php
 use Asyncara\Async;
@@ -39,4 +39,4 @@ try {
 
 Use another connection to publish. The subscriber has an owner and bounded notifications: `notificationLimit` defaults to 1,024 and `notificationByteLimit` to 1 MiB. Overflow fails rather than silently discarding application messages. Process promptly, inspect `statistics`, and use a durable Redis Streams/application design when Pub/Sub's delivery semantics are insufficient. `drainNotifications` is an explicit consumption operation, not a background loss policy.
 
-Cluster redirection, Sentinel failover and RESP streaming aggregates are not implemented as full client features. There is no transparent reconnect/replay guarantee. A closed or uncertain connection must be replaced by application policy. RESP 3 support is not a claim that every Redis deployment topology or module-specific push format is certified.
+Cluster redirection, Sentinel failover and RESP streaming aggregates are not implemented as full client features. There is no transparent reconnect/replay guarantee. A closed or uncertain connection must be replaced by application policy. RESP3 does not add Cluster routing or Sentinel discovery to this connection API.

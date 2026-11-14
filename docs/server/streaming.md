@@ -20,7 +20,7 @@ $app->get('/export', function () {
 
 The file is read through native workers. Response chunks are requested as the transport becomes ready; a slow consumer does not require buffering the entire file. A response chunk must be a string no larger than 64 KiB. The default Files stream chunk fits this bound. A StreamResponse is single-use and owns its producer; App closes it on completion, failure, HEAD handling or disconnect.
 
-For generated NDJSON, use a lazy generator and yield one bounded line at a time. Do not materialize all rows first or allow one JSON line to exceed the chunk limit. This is also the basis for SSE framing (`data: ...\n\n`), but heartbeat, reconnection and application delivery guarantees remain your responsibility; no browser-wide SSE certification is implied.
+For generated NDJSON, use a lazy generator and yield one bounded line at a time. Do not materialize all rows first or allow one JSON line to exceed the chunk limit. This is also the basis for SSE framing (`data: ...\n\n`), but heartbeat, reconnection and application delivery guarantees remain your responsibility.
 
 ## Receive a streamed body
 
@@ -50,4 +50,4 @@ Use a private directory and an application-generated filename. This example remo
 
 ## Disconnect and cleanup
 
-A disconnected client cancels its handler. Use try/finally and bounded shields to release resources. App closes any remaining request input after dispatch. Do not pass a request body stream to background work that outlives the request. Error after response streaming begins aborts that transfer rather than appending a different response. Slow-consumer bounds and timeout behavior are part of the transport, not proof of unlimited connection capacity.
+A disconnected client cancels its handler. Use try/finally and bounded shields to release resources. App closes any remaining request input after dispatch. Do not pass a request body stream to background work that outlives the request. Error after response streaming begins aborts that transfer rather than appending a different response. Configure connection, buffer and timeout limits for the number of concurrent streams your service can handle.

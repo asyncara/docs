@@ -28,6 +28,6 @@ One interpreter executes one PHP task at a time. Other tasks progress when that 
 
 ## Version and support scope
 
-These guides describe 0.10.0 APIs and explicitly identify later Android preview packages. The release is **EXPERIMENTAL**. A tested local protocol path is not certification of every server, proxy, device or deployment. See [compatibility](operations/compatibility.md) before selecting a platform.
+These guides cover Asyncara 0.10.0. The release is **EXPERIMENTAL**. Check the [platform and feature compatibility matrix](operations/compatibility.md) before choosing a package or deployment mode.
 
 Namespace spelling matters with PSR-4 on case-sensitive systems. The client is `Asyncara\HTTP\HttpClient`; server responses are `Asyncara\Server\Response`, a different class from `Asyncara\HTTP\Response`. Examples consistently use the source's real names.

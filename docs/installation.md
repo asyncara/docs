@@ -1,79 +1,113 @@
 ---
-title: "Installation and verification"
+title: "Installation"
 ---
 
-An installation needs both the native extension and the PHP library. The prebuilt bundles contain them and an `asyncara` launcher. Copying only `asyncara.so` does not install `App`, `Async` or the HTTP client classes.
+Install Asyncara, check that it loads, then run your first application. You need PHP CLI and an Asyncara package that matches your operating system, processor architecture, PHP version and thread-safety mode.
 
-## Linux prebuilt bundles
+:::caution Download availability
+The public v0.10.0 installer and package download links are currently unavailable. The download commands below require those files to be available on the [release page](https://github.com/asyncara/asyncara/releases/tag/v0.10.0). If you already have a matching package, use the offline installation steps below.
+:::
 
-The initial packages target **Ubuntu 24.04 amd 64, PHP 8.3.36, 8.4.27 or 8.5.12 NTS**, non-debug, 64-bit. Match the exact PHP patch, architecture and userspace. A correct CPU architecture alone does not establish libc or dependency compatibility.
+## 1. Check your PHP version
+
+```bash
+php -v
+php -r 'printf("PHP %s / %s / %d-bit\n", PHP_VERSION, PHP_ZTS ? "ZTS" : "NTS", PHP_INT_SIZE * 8);'
+uname -m
+```
+
+The Linux v0.10.0 packages require **Ubuntu 24.04, x86_64 (amd64), and PHP 8.3.36, 8.4.27 or 8.5.12 NTS**, with a non-debug PHP build. Choose the package for your exact PHP version. See [compatibility](operations/compatibility.md) for other platforms.
+
+PHP CLI, curl and CA certificates are required. Linux packages also use the system libcurl, SQLite, libpq, OpenSSL and zlib libraries. On Ubuntu their package names include `libcurl4t64`, `libsqlite3-0`, `libpq5`, `libssl3t64` and `zlib1g`.
+
+## 2. Install on Linux
+
+When downloads are available, run:
 
 ```bash
 curl -fsSL https://github.com/asyncara/asyncara/releases/download/v0.10.0/install.sh | sh
+```
+
+The installer selects the matching package, verifies its SHA-256 checksum, installs the runtime and creates the `asyncara` command. It does not build the extension locally or edit your original `php.ini`. If it prints a PATH instruction, apply that instruction in your shell before continuing.
+
+To choose a PHP executable or install from files you already downloaded, save the installer first:
+
+```bash
+curl -fSLo install.sh https://github.com/asyncara/asyncara/releases/download/v0.10.0/install.sh
+curl -fSLo install.sh.sha256 https://github.com/asyncara/asyncara/releases/download/v0.10.0/install.sh.sha256
+sha256sum -c install.sh.sha256
+ASYNCARA_PHP=/usr/bin/php8.4 sh install.sh --version 0.10.0
+```
+
+For offline installation, place the matching package and its `.sha256` file beside the saved installer, then run:
+
+```bash
+sh install.sh --bundle asyncara-0.10.0-php8.4.27-nts-ubuntu24.04-x86_64.tar.gz
+```
+
+Use `sh install.sh --check-platform` to inspect compatibility before installing. An incompatible package is rejected; select a matching package instead of bypassing the check.
+
+## 3. Check the installation
+
+```bash
 asyncara --check
 asyncara --example 127.0.0.1:8080
 ```
 
-Open `/status` on the example server. Anonymous download requires a publicly accessible Release. For a private repository, authenticate with GitHub CLI, download `install.sh` and its checksum using the commands below, then run the installer. The installer can use authenticated `gh` for private binary downloads.
+The second command starts a local example server. In another terminal, run:
 
 ```bash
-gh auth login --hostname github.com
-gh release download v0.10.0 --repo asyncara/asyncara --pattern 'install.sh*'
-sha256sum -c install.sh.sha256
-sh install.sh
+curl http://127.0.0.1:8080/status
 ```
 
-The bootstrap uses POSIX shell and PHP, without Python, Cargo, phpize or Docker on the application machine. It verifies the archive and manifest, checks compatibility, and runs installation checks before activating the launcher. It does not edit your original php.ini, run sudo, or change the parent shell's PATH. Follow its printed PATH instruction if no writable PATH directory is available.
+Stop the example with Ctrl+C. Continue with [your first application](quickstart.md) to create your own server and HTTP client.
 
-Install the runtime libraries through your normal package policy: PHP CLI, libcurl, SQLite, libpq, OpenSSL and zlib, plus curl/CA certificates for download. On Ubuntu the package names include `php-cli`, `libcurl4t64`, `libsqlite3-0`, `libpq5`, `libssl3t64` and `zlib1g`. Your package source may supply a different PHP patch; check `php -v` instead of assuming compatibility.
+## Android with Termux
+
+Android packages require **native Termux, Bionic, aarch64 or x86_64, and PHP 8.5.12 NTS**. Use the Android package for Termux, not an Ubuntu package or a package intended for a GNU/Linux proot environment. These packages are marked preview.
+
+Install dependencies and verify PHP before selecting a package:
 
 ```bash
-ASYNCARA_PHP=/usr/bin/php8.4 sh install.sh --version 0.10.0
-sh install.sh --check-platform
-# Offline: keep the matching .sha256 beside the archive.
-sh install.sh --bundle asyncara-0.10.0-php8.4.27-nts-ubuntu24.04-x86_64.tar.gz
+pkg install php curl libcurl libsqlite openssl postgresql mariadb brotli zstd
+php -n -r 'exit(PHP_VERSION === "8.5.12" && !PHP_ZTS && PHP_INT_SIZE === 8 ? 0 : 1);'
 ```
 
-## Android: native Termux, 64-bit previews
-
-The `aarch64` and `x86_64` packages target PHP 8.5.12 NTS and Bionic. They are **later-source previews**, identified by `hyper-sql-preview` in their names, attached to the 0.10.0 Release. They are not interchangeable with Ubuntu binaries or a GNU/Linux proot userspace.
+If the PHP check fails, stop and choose a package matching the PHP version installed on your device. When release downloads are available, run the following in a new directory:
 
 ```bash
+set -eu
 arch=$(dpkg --print-architecture)
-case "$arch" in aarch64|x86_64) ;; *) echo 'No validated package for this architecture'; exit 1;; esac
+case "$arch" in aarch64|x86_64) ;; *) echo 'No package for this architecture'; exit 1;; esac
 bundle="asyncara-0.10.0-android-$arch-php8.5.12-nts-hyper-sql-preview"
-gh release download v0.10.0 --repo asyncara/asyncara --pattern "$bundle.tar.gz*"
+base=https://github.com/asyncara/asyncara/releases/download/v0.10.0
+curl -fSLo "$bundle.tar.gz" "$base/$bundle.tar.gz"
+curl -fSLo "$bundle.tar.gz.sha256" "$base/$bundle.tar.gz.sha256"
 sha256sum -c "$bundle.tar.gz.sha256"
-pkg install php libcurl libsqlite openssl postgresql mariadb brotli zstd
-php -n -r 'exit(PHP_VERSION === "8.5.12" && !PHP_ZTS && PHP_INT_SIZE === 8 ? 0 : 1);' || exit 1
-test ! -e "$bundle" || exit 1
+test ! -e "$bundle"
 tar -xzf "$bundle.tar.gz"
 export PATH="$PWD/$bundle:$PATH"
 asyncara --check
 ```
 
-Termux repositories can advance PHP: a newer patch needs a matching bundle, not a bypass. The Linux shell installer does not yet automatically select these Android previews. Independent tests used native Bionic containers on matching architectures; they do not certify every physical device, Android version or SELinux policy. Windows and new 32-bit builds are deferred.
+Keep the extracted directory in place. To use the command in future terminals, add its absolute path to your shell's PATH configuration. The Linux installer does not select Android packages automatically.
 
-## Autoloading and application extensions
-
-The launcher supplies the Asyncara autoloader and runs `php -n`. Your original ini files and dynamically enabled extensions are not loaded. Pass explicit `-d extension=...` options for application extensions after checking compatibility. To launch PHP yourself:
+## Running your application
 
 ```bash
-php -n -d extension=/opt/asyncara/asyncara.so app.php
+asyncara app.php
 ```
 
-```php
-<?php
-require '/opt/asyncara/autoload.php';
-Asyncara\Async::run(fn() => print("ready\n"));
-```
+The launcher loads both the extension and Asyncara's PHP library. It starts PHP with `-n`, so your normal `php.ini` and its dynamically enabled extensions are not loaded. If your application needs another extension, pass it explicitly, for example `asyncara -d extension=mbstring app.php`, using an extension compatible with that PHP executable.
 
-The library's Composer name is `asyncara/runtime`. Linux bundles include production PSR dependencies. Android previews include Asyncara classes but optional PSR integration needs its dependencies separately. A Composer autoloader does not replace the native extension.
+For direct PHP invocation, load your installed `asyncara.so` with `-d extension=/path/to/asyncara.so` and require the accompanying runtime autoloader in your script. Copying only the extension does not install `App`, `Async` or `HttpClient`.
 
-## Source builds and PIE
+Linux packages include the PSR dependencies used by the HTTP adapter. Install your application's additional dependencies separately. Android packages require separate Composer dependencies when you use the optional PSR adapter.
 
-Source builds require a matching PHP SDK, phpize, C 11, libcurl and SQLite. libpq, Connector/C and Rust/Hyper are optional configure features with additional dependencies. Inspect `ext/config.m4` and use the same PHP patch for headers and runtime; do not reuse a module built for a different SDK.
+## Other installation methods
 
-`pie install asyncara/asyncara` and `pie install asyncara/asyncara:0.10.0` are **not currently a verified complete installation path**. Prepared metadata alone does not deliver the PHP runtime, launcher and archive verification required by this package. The project does not replace upstream PIE with a lookalike executable.
+PIE is not a supported complete installation method for v0.10.0. Use a matching package for the extension, PHP library and launcher together.
 
-After every installation or upgrade, run `asyncara --check` and a small application using the capabilities you need. Keep the previous version until checks pass. See [troubleshooting](operations/troubleshooting.md) for loader and dependency errors.
+For a custom PHP build, source installation requires matching PHP headers, phpize and php-config, a C11 compiler, libcurl and SQLite development libraries. Optional PostgreSQL, MySQL/MariaDB and Hyper require their corresponding libraries. Follow the source repository's build instructions for those options.
+
+Before upgrading an existing application, keep the previous installation, run `asyncara --check` with the new one, and exercise your application's database and network connections. See [troubleshooting](operations/troubleshooting.md) if loading fails.
