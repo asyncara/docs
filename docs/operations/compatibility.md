@@ -8,12 +8,14 @@ Choose a package for your PHP version and platform, then check the features avai
 
 | Platform | Package requirements | Availability |
 |---|---|---|
-| Linux | Ubuntu 24.04, x86_64, PHP 8.3.36 / 8.4.27 / 8.5.12 NTS | Public packages; [automatic installer](../installation.md) |
-| Linux aarch64 (Ubuntu / Kali, including Android proot) | No matching Linux package in v0.10.0 | Automatic prebuilt installation unavailable |
+| Linux x86_64 (amd64) | glibc 2.38+, PHP 8.3.0 / 8.3.36 / 8.4.11 / 8.4.27 / 8.5.11 / 8.5.12 NTS | Public packages; [automatic installer](../installation.md) |
+| Linux aarch64 (ARM64) | glibc 2.38+, PHP 8.3.0 / 8.3.36 / 8.4.11 / 8.4.27 / 8.5.11 / 8.5.12 NTS | Public packages; same automatic installer |
 | Android / Termux | Bionic, aarch64 or x86_64, PHP 8.5.12 NTS | Preview packages; manual package installation |
 | Windows | — | No supported package |
 | macOS / FreeBSD | — | No supported prebuilt package |
 | 32-bit targets | — | No supported package |
+
+Linux package selection does not depend on the distribution name or release number. Ubuntu, Debian and Kali installations, including GNU/Linux environments inside Android proot, can use the same architecture-specific bundle when PHP and the native library requirements match. The installer checks glibc and runs native loading, task, file and SQLite checks before activating the command. Builds and installation tests run on Ubuntu 24.04 for both architectures; this does not certify every distribution or device.
 
 The PHP library targets PHP 8.3–8.5. A prebuilt extension requires the exact PHP build it was packaged for, including NTS/ZTS, architecture and debug mode. Do not use a Linux/glibc package in native Termux/Bionic. ZTS packages and concurrent PHP interpreter threads are not supported installation options.
 

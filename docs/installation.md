@@ -7,7 +7,7 @@ Install Asyncara, check that it loads, then run your first application. You need
 Download the installer and packages directly from the [v0.10.0 release](https://github.com/asyncara/asyncara/releases/tag/v0.10.0). No GitHub account or GitHub CLI is required.
 
 :::caution Check the package requirements
-The automatic Linux installer currently has packages for **Ubuntu 24.04 x86_64** only, with the PHP versions listed below. Ubuntu/Kali running on **aarch64**, including inside Android proot, do not have matching Linux packages in this release. Native Termux packages are separate and cannot be loaded into Ubuntu or Kali.
+The automatic Linux installer supports **x86_64 (amd64) and aarch64 (ARM64)** with glibc 2.38+ and the PHP versions below. It selects Linux packages independently of your distribution name, including Ubuntu and Kali inside Android proot. Native Termux uses Bionic and needs a separate Android package.
 :::
 
 ## 1. Check your PHP version
@@ -18,9 +18,9 @@ php -r 'printf("PHP %s / %s / %d-bit\n", PHP_VERSION, PHP_ZTS ? "ZTS" : "NTS", P
 uname -m
 ```
 
-The Linux v0.10.0 packages require **Ubuntu 24.04, x86_64 (amd64), and PHP 8.3.36, 8.4.27 or 8.5.12 NTS**, with a non-debug PHP build. Choose the package for your exact PHP version. See [compatibility](operations/compatibility.md) for other platforms.
+The Linux v0.10.0 packages require **glibc 2.38+, x86_64 or aarch64, and PHP 8.3.0, 8.3.36, 8.4.11, 8.4.27, 8.5.11 or 8.5.12 NTS**, with a non-debug PHP build. The installer chooses the package for your exact PHP version. It will not load a binary compiled with an incompatible PHP SDK. See [compatibility](operations/compatibility.md) for other platforms.
 
-PHP CLI, curl and CA certificates are required. Linux packages also use the system libcurl, SQLite, libpq, OpenSSL and zlib libraries. On Ubuntu their package names include `libcurl4t64`, `libsqlite3-0`, `libpq5`, `libssl3t64` and `zlib1g`.
+PHP CLI, curl, CA certificates and `getconf` (normally supplied by `libc-bin`) are required. Linux packages also use the system libcurl, SQLite, libpq, OpenSSL and zlib libraries. On Ubuntu their package names include `libcurl4t64`, `libsqlite3-0`, `libpq5`, `libssl3t64` and `zlib1g`.
 
 ## 2. Install on Linux
 
@@ -44,7 +44,7 @@ ASYNCARA_PHP=/usr/bin/php8.4 sh install.sh --version 0.10.0
 For offline installation, place the matching package and its `.sha256` file beside the saved installer, then run:
 
 ```bash
-sh install.sh --bundle asyncara-0.10.0-php8.4.27-nts-ubuntu24.04-x86_64.tar.gz
+sh install.sh --bundle asyncara-0.10.0-php8.4.27-nts-linux-glibc-x86_64.tar.gz
 ```
 
 Use `sh install.sh --check-platform` to inspect compatibility before installing. An incompatible or missing package is rejected. A “No prebuilt package” error includes the exact package filename needed by your system; signing into GitHub cannot supply a package that has not been published. Do not rename another platform's archive or bypass compatibility checks.
