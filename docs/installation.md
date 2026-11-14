@@ -18,7 +18,7 @@ php -r 'printf("PHP %s / %s / %d-bit\n", PHP_VERSION, PHP_ZTS ? "ZTS" : "NTS", P
 uname -m
 ```
 
-The Linux v0.10.0 packages require **glibc 2.38+, x86_64 or aarch64, and PHP 8.3.0, 8.3.36, 8.4.11, 8.4.27, 8.5.11 or 8.5.12 NTS**, with a non-debug PHP build. The installer chooses the package for your exact PHP version. It will not load a binary compiled with an incompatible PHP SDK. See [compatibility](operations/compatibility.md) for other platforms.
+The Linux v0.10.0 packages require **glibc 2.38+, x86_64 or aarch64, and PHP 8.3, 8.4 or 8.5 NTS**, with a non-debug PHP build. The installer chooses the package for your exact PHP version. It will not load a binary compiled with an incompatible PHP SDK. The release contains 146 Linux bundles for the [73 published PHP versions](operations/compatibility.md#published-php-versions). See that table for exact versions and other platforms.
 
 PHP CLI, curl, CA certificates and `getconf` (normally supplied by `libc-bin`) are required. Linux packages also use the system libcurl, SQLite, libpq, OpenSSL and zlib libraries. On Ubuntu their package names include `libcurl4t64`, `libsqlite3-0`, `libpq5`, `libssl3t64` and `zlib1g`.
 
