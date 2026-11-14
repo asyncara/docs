@@ -9,7 +9,7 @@ Start with `asyncara --check`, `php -v` and `php --ini`. Inspect `Runtime::infor
 | Extension cannot load | PHP version and module API, architecture, NTS/ZTS and shared libraries | Install a matching package and its dependencies; renaming an incompatible binary cannot make it load |
 | Class not found | Library autoloader as well as the native extension | Use the `asyncara` launcher, or explicitly load both the extension and library autoloader |
 | No matching package | The [platform matrix](compatibility.md) | Choose a listed package; other configurations need a custom build |
-| Download returns 404 | [Download availability](../installation.md) and the exact release filename | Use a published matching package when available; do not run an empty or failed download |
+| No prebuilt package / download returns 404 | The reported PHP version, operating system, architecture and exact filename | Compare with the [available packages](compatibility.md); a missing package is not fixed by signing into GitHub |
 | TLS verification fails | CA file, certificate chain, hostname or IP SAN, system time | Correct the trust and identity configuration while keeping verification enabled |
 | Timers or unrelated requests stall | CPU loops, blocking PHP APIs or synchronous logging | Use Asyncara I/O APIs and move independent CPU work to [ProcessPool](../io/processes.md) |
 | Transaction never finishes | A child Task waiting for a connection held by its waiting parent | Keep the transaction's queries in the owning Task |

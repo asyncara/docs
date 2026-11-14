@@ -4,8 +4,10 @@ title: "Installation"
 
 Install Asyncara, check that it loads, then run your first application. You need PHP CLI and an Asyncara package that matches your operating system, processor architecture, PHP version and thread-safety mode.
 
-:::caution Download availability
-The public v0.10.0 installer and package download links are currently unavailable. The download commands below require those files to be available on the [release page](https://github.com/asyncara/asyncara/releases/tag/v0.10.0). If you already have a matching package, use the offline installation steps below.
+Download the installer and packages directly from the [v0.10.0 release](https://github.com/asyncara/asyncara/releases/tag/v0.10.0). No GitHub account or GitHub CLI is required.
+
+:::caution Check the package requirements
+The automatic Linux installer currently has packages for **Ubuntu 24.04 x86_64** only, with the PHP versions listed below. Ubuntu/Kali running on **aarch64**, including inside Android proot, do not have matching Linux packages in this release. Native Termux packages are separate and cannot be loaded into Ubuntu or Kali.
 :::
 
 ## 1. Check your PHP version
@@ -22,7 +24,7 @@ PHP CLI, curl and CA certificates are required. Linux packages also use the syst
 
 ## 2. Install on Linux
 
-When downloads are available, run:
+On a supported Linux/PHP configuration, run:
 
 ```bash
 curl -fsSL https://github.com/asyncara/asyncara/releases/download/v0.10.0/install.sh | sh
@@ -45,7 +47,7 @@ For offline installation, place the matching package and its `.sha256` file besi
 sh install.sh --bundle asyncara-0.10.0-php8.4.27-nts-ubuntu24.04-x86_64.tar.gz
 ```
 
-Use `sh install.sh --check-platform` to inspect compatibility before installing. An incompatible package is rejected; select a matching package instead of bypassing the check.
+Use `sh install.sh --check-platform` to inspect compatibility before installing. An incompatible or missing package is rejected. A “No prebuilt package” error includes the exact package filename needed by your system; signing into GitHub cannot supply a package that has not been published. Do not rename another platform's archive or bypass compatibility checks.
 
 ## 3. Check the installation
 
@@ -73,7 +75,7 @@ pkg install php curl libcurl libsqlite openssl postgresql mariadb brotli zstd
 php -n -r 'exit(PHP_VERSION === "8.5.12" && !PHP_ZTS && PHP_INT_SIZE === 8 ? 0 : 1);'
 ```
 
-If the PHP check fails, stop and choose a package matching the PHP version installed on your device. When release downloads are available, run the following in a new directory:
+If the PHP check fails, stop and choose a package matching the PHP version installed on your device. Run the following in a new directory:
 
 ```bash
 set -eu

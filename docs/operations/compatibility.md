@@ -8,7 +8,8 @@ Choose a package for your PHP version and platform, then check the features avai
 
 | Platform | Package requirements | Availability |
 |---|---|---|
-| Linux | Ubuntu 24.04, x86_64, PHP 8.3.36 / 8.4.27 / 8.5.12 NTS | See [installation](../installation.md) for download availability |
+| Linux | Ubuntu 24.04, x86_64, PHP 8.3.36 / 8.4.27 / 8.5.12 NTS | Public packages; [automatic installer](../installation.md) |
+| Linux aarch64 (Ubuntu / Kali, including Android proot) | No matching Linux package in v0.10.0 | Automatic prebuilt installation unavailable |
 | Android / Termux | Bionic, aarch64 or x86_64, PHP 8.5.12 NTS | Preview packages; manual package installation |
 | Windows | — | No supported package |
 | macOS / FreeBSD | — | No supported prebuilt package |
